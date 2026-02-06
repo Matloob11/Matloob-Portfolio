@@ -14,9 +14,17 @@ const Footer = () => {
       )}
     >
       <div className="w-full flex justify-between items-center max-w-7xl mx-auto">
-        <p className="text-white text-md font-bold flex">
-          &copy; Matloob {new Date().getFullYear()}. All rights reserved.
-        </p>
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <p className="text-white text-md font-bold flex">
+            &copy; Matloob {new Date().getFullYear()}. All rights reserved.
+          </p>
+          <Link
+            to="/admin"
+            className="text-secondary text-[12px] font-bold uppercase tracking-widest hover:text-white transition opacity-40 hover:opacity-100"
+          >
+            Admin Portal
+          </Link>
+        </div>
 
         {/* Nav Links (Desktop) */}
         <ul className="list-none hidden flex-row sm:flex gap-10">

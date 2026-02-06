@@ -153,6 +153,30 @@ VITE_APP_EMAILJS_RECIEVER=your@email.com
 
 ![Functional Contact form](/.github/images/img4.png "Functional Contact form")
 
+## :control_knobs: Managing Content (Admin Panel)
+
+This project includes a built-in Admin Panel to easily manage your portfolio content (text, images, social links, etc.) without touching the code.
+
+### How to use the Admin Panel:
+
+#### Option A: Locally (Recommended for image uploads)
+1. **Run locally**: Run `npm run admin` in your terminal.
+2. **Access**: [http://localhost:5173/admin](http://localhost:5173/admin).
+3. **Save**: Click **"Save All"** to update local files.
+4. **Deploy**: Push to GitHub.
+
+#### Option B: Production (Directly from Vercel)
+1. **Generate PAT**: Go to [GitHub Token Settings](https://github.com/settings/tokens) and create a **Classic Token** with `repo` scope.
+2. **Setup**: Go to your Vercel Admin Panel, open the **"Repo & Brand"** tab, and paste your token.
+3. **Save**: Edit your content and click **"Save All"**. The Admin Panel will use the GitHub API to update your repository automatically.
+4. **Auto-Redeploy**: Vercel will detect the GitHub update and redeploy your site within minutes.
+
+> [!TIP]
+> Your GitHub Token is stored safely in your browser and is never uploaded.
+
+> [!NOTE]
+> Image uploads are currently only supported via the **Local Mode**. In production, please use external image URLs (e.g., from Imgur, Cloudinary) or upload images locally first.
+
 ## :gear: Tech Stack
 
 [![React JS](https://skillicons.dev/icons?i=react "React JS")](https://react.dev/ "React JS") [![Vite JS](https://skillicons.dev/icons?i=vite "Vite JS")](https://vitejs.dev/ "Vite JS") [![Typescript](https://skillicons.dev/icons?i=ts "Typescript")](https://www.typescriptlang.org/ "Typescript") [![Tailwind CSS](https://skillicons.dev/icons?i=tailwind "Tailwind CSS")](https://tailwindcss.com/ "Tailwind CSS") [![Netlify](https://skillicons.dev/icons?i=netlify "Netlify")](https://netlify.app/ "Netlify")

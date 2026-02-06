@@ -19,7 +19,8 @@ import {
     Linkedin,
     Instagram,
     Cpu,
-    Search
+    Search,
+    Key
 } from "lucide-react";
 import { assetsMap } from "../assets";
 import LucideIcon from "./LucideIcon";
@@ -45,6 +46,11 @@ const AdminPanel = () => {
     const [error, setError] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState("nav");
 
+    // GitHub Integration State
+    const [githubToken, setGithubToken] = useState(localStorage.getItem("gh_pat") || "");
+    const [isSaving, setIsSaving] = useState(false);
+    const isProduction = window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1";
+
     useEffect(() => {
         const session = localStorage.getItem("admin_session");
         if (session) {
@@ -61,9 +67,14 @@ const AdminPanel = () => {
     const fetchData = () => {
         setLoading(true);
         setError(null);
-        fetch("http://localhost:5000/api/data")
+
+        // In production, we fetch directly from the local JSON file (read-only)
+        // In local dev, we try to fetch from the admin server
+        const fetchUrl = isProduction ? "/src/constants/portfolio-data.json" : "http://localhost:5000/api/data";
+
+        fetch(fetchUrl)
             .then((res) => {
-                if (!res.ok) throw new Error("Failed to connect to admin server");
+                if (!res.ok) throw new Error("Failed to load data");
                 return res.json();
             })
             .then((json) => {
@@ -72,12 +83,24 @@ const AdminPanel = () => {
             })
             .catch((err) => {
                 console.error("Error fetching data:", err);
-                setError("Admin server is not running. Please run 'npm run admin' in a new terminal.");
+                if (isProduction) {
+                    setError("Failed to load portfolio data from production source.");
+                } else {
+                    setError("Admin server is not running or unreachable. If you are on Vercel, please note that the Admin Panel only works when running the project locally with 'npm run admin' unless GitHub API is configured.");
+                }
                 setLoading(false);
             });
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        if (isProduction) {
+            await handleProductionSave();
+        } else {
+            handleLocalSave();
+        }
+    };
+
+    const handleLocalSave = () => {
         fetch("http://localhost:5000/api/data", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -85,10 +108,65 @@ const AdminPanel = () => {
         })
             .then((res) => res.json())
             .then((res) => alert("Bhai, Data Successfully Save Ho Gaya! 🚀"))
-            .catch((err) => alert("Error saving data"));
+            .catch((err) => alert("Error saving data locally. Ensure 'npm run admin' is running."));
+    };
+
+    const handleProductionSave = async () => {
+        if (!githubToken) {
+            alert("Bhai, Vercel par save karne ke liye 'GitHub Personal Access Token' chahiye. Brand & Info tab mein set karein.");
+            setActiveTab("brand");
+            return;
+        }
+
+        setIsSaving(true);
+        try {
+            // Configuration for GitHub API
+            const owner = "Matloob11"; // User repository owner
+            const repo = "Matloob-Portfolio"; // Repository name
+            const path = "src/constants/portfolio-data.json";
+            const branch = "main";
+
+            // 1. Get the current file SHA
+            const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`, {
+                headers: { "Authorization": `token ${githubToken}` }
+            });
+
+            if (!getRes.ok) throw new Error("Bhai, SHA fetch karne mein masla hua. Token check karein.");
+            const fileData = await getRes.json();
+            const sha = fileData.sha;
+
+            // 2. Commit the new data
+            const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+            const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `token ${githubToken}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: "Admin: Update portfolio data via Vercel Portal",
+                    content,
+                    sha,
+                    branch
+                })
+            });
+
+            if (!putRes.ok) throw new Error("Commit failed. Check your token permissions.");
+
+            alert("Bhai, Changes GitHub par save ho gaye hain! 🚀 Vercel ab redeploy shuru kar dega. 2-3 minutes mein website update ho jayegi.");
+        } catch (err: any) {
+            alert("Error: " + err.message);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, callback: (url: string) => void) => {
+        if (isProduction) {
+            alert("Bhai, Production mein image upload currently supported nahi hai. Aap image URL use karein ya local admin panel se upload karein.");
+            return;
+        }
+
         const file = e.target.files?.[0];
         if (!file) return;
 
@@ -185,7 +263,7 @@ const AdminPanel = () => {
 
     const tabs = [
         { id: "nav", label: "Navigation", icon: <LayoutDashboard className="w-5 h-5" /> },
-        { id: "brand", label: "Brand & Info", icon: <Settings className="w-5 h-5" /> },
+        { id: "brand", label: "Repo & Brand", icon: <Settings className="w-5 h-5" /> },
         { id: "services", label: "Services", icon: <Zap className="w-5 h-5" /> },
         { id: "tech", label: "Technologies", icon: <Cpu className="w-5 h-5" /> },
         { id: "exp", label: "Experience", icon: <Briefcase className="w-5 h-5" /> },
@@ -210,7 +288,7 @@ const AdminPanel = () => {
                         </div>
                         <div>
                             <h1 className="text-2xl font-black uppercase tracking-tighter">Control Center</h1>
-                            <p className="text-secondary text-[10px] font-bold uppercase">Dynamic Portfolio v3.0</p>
+                            <p className="text-secondary text-[10px] font-bold uppercase">{isProduction ? "Production Mode (via GitHub)" : "Local Development Mode"}</p>
                         </div>
                     </div>
 
@@ -219,9 +297,10 @@ const AdminPanel = () => {
                             whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(0, 206, 168, 0.4)" }}
                             whileTap={{ scale: 0.95 }}
                             onClick={handleSave}
-                            className="premium-gradient px-8 py-3 rounded-2xl font-black uppercase tracking-wider text-sm shadow-xl flex items-center gap-2"
+                            disabled={isSaving}
+                            className={`premium-gradient px-8 py-3 rounded-2xl font-black uppercase tracking-wider text-sm shadow-xl flex items-center gap-2 ${isSaving ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
-                            <Save className="w-4 h-4" /> Save All
+                            <Save className={`w-4 h-4 ${isSaving ? 'animate-spin' : ''}`} /> {isSaving ? "Saving..." : "Save All"}
                         </motion.button>
                         <button onClick={handleLogout} className="p-3 bg-red-500/10 text-red-500 rounded-2xl hover:bg-red-500/20 transition-all border border-red-500/20">
                             <LogOut className="w-5 h-5" />
@@ -273,13 +352,34 @@ const AdminPanel = () => {
                                 className="glass-morphism p-8 md:p-10 rounded-[2.5rem] border border-white/5 shadow-inner"
                             >
 
-                                {/* BRAND & INFO TAB */}
+                                {/* BRAND & REPO TAB */}
                                 {activeTab === "brand" && (
                                     <div className="space-y-8">
-                                        <SectionTitle title="Identity Hub" subtitle="Centralized management for site branding and personal identifiers" />
+                                        <SectionTitle title="Identity & Config" subtitle="Production saving settings and site branding" />
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                             <div className="space-y-6">
+                                                <div className="bg-secondary/10 p-8 rounded-[2rem] border border-secondary/20 space-y-6 shadow-lg shadow-secondary/5">
+                                                    <h3 className="text-secondary text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-2">
+                                                        <Key className="w-3 h-3" /> GitHub Save Config
+                                                    </h3>
+                                                    <div className="space-y-4">
+                                                        <p className="text-[10px] text-gray-400 leading-relaxed italic">
+                                                            To save changes on Vercel, paste your "Personal Access Token" below. Create one at GitHub Settings &gt; Developer &gt; Personal Access Tokens (Classic) with "repo" scope.
+                                                        </p>
+                                                        <InputGroup
+                                                            label="GitHub Personal Access Token"
+                                                            value={githubToken}
+                                                            type="password"
+                                                            placeholder="ghp_xxxxxxxxxxxx"
+                                                            onChange={(v: string) => {
+                                                                setGithubToken(v);
+                                                                localStorage.setItem("gh_pat", v);
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+
                                                 <div className="bg-black/20 p-8 rounded-[2rem] border border-white/5 space-y-6">
                                                     <h3 className="text-secondary text-[10px] font-black uppercase tracking-widest mb-2">Core Identity</h3>
                                                     <InputGroup label="Brand Short Name" value={data.personalInfo.name} onChange={(v: string) => {
@@ -289,7 +389,9 @@ const AdminPanel = () => {
                                                         setData({ ...data, personalInfo: { ...data.personalInfo, fullName: v } });
                                                     }} />
                                                 </div>
+                                            </div>
 
+                                            <div className="space-y-6">
                                                 <div className="bg-black/20 p-8 rounded-[2rem] border border-white/5 space-y-6">
                                                     <h3 className="text-secondary text-[10px] font-black uppercase tracking-widest mb-2">Hero Section Content</h3>
                                                     <InputGroup label="Hero Heading Text" value={data.personalInfo.heroTitle} onChange={(v: string) => {
@@ -304,9 +406,7 @@ const AdminPanel = () => {
                                                         placeholder="Hero Subtitle"
                                                     />
                                                 </div>
-                                            </div>
 
-                                            <div className="space-y-6">
                                                 <div className="bg-black/20 p-8 rounded-[2rem] border border-white/5 space-y-6 flex flex-col items-center">
                                                     <h3 className="text-secondary text-[10px] font-black uppercase tracking-widest mb-2 w-full">Brand Signature (Logo)</h3>
                                                     <div className="w-32 h-32 bg-white/5 rounded-3xl flex items-center justify-center p-6 border border-white/5 shadow-inner">
@@ -321,9 +421,11 @@ const AdminPanel = () => {
                                                             setData({ ...data, personalInfo: { ...data.personalInfo, logo: v } });
                                                         }} mini />
                                                     </div>
-                                                    <FileUploader label="Upload New Brand Logo" current={data.personalInfo.logo} onUpload={(url: string) => {
-                                                        setData({ ...data, personalInfo: { ...data.personalInfo, logo: url } });
-                                                    }} />
+                                                    {!isProduction && (
+                                                        <FileUploader label="Upload New Brand Logo" current={data.personalInfo.logo} onUpload={(url: string) => {
+                                                            setData({ ...data, personalInfo: { ...data.personalInfo, logo: url } });
+                                                        }} />
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
@@ -375,11 +477,13 @@ const AdminPanel = () => {
                                                                 const d = [...data.services]; d[i].icon = v; setData({ ...data, services: d });
                                                             }} mini placeholder="Lucide name (e.g. Code) or link" />
                                                         </div>
-                                                        <div className="mt-auto w-full">
-                                                            <FileUploader current={s.icon} onUpload={(url: string) => {
-                                                                const d = [...data.services]; d[i].icon = url; setData({ ...data, services: d });
-                                                            }} />
-                                                        </div>
+                                                        {!isProduction && (
+                                                            <div className="mt-auto w-full">
+                                                                <FileUploader current={s.icon} onUpload={(url: string) => {
+                                                                    const d = [...data.services]; d[i].icon = url; setData({ ...data, services: d });
+                                                                }} />
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </Tilt>
                                             ))}
@@ -433,19 +537,21 @@ const AdminPanel = () => {
                                                             const d = [...data.technologies]; d[i].icon = e.target.value; setData({ ...data, technologies: d });
                                                         }}
                                                     />
-                                                    <div className="mt-2">
-                                                        <input type="file" id={`skill-${i}`} className="hidden" onChange={async (e) => {
-                                                            const file = e.target.files?.[0];
-                                                            if (!file) return;
-                                                            const fd = new FormData(); fd.append("image", file);
-                                                            const res = await fetch("http://localhost:5000/api/upload", { method: "POST", body: fd });
-                                                            const resJson = await res.json();
-                                                            if (resJson.url) {
-                                                                const d = [...data.technologies]; d[i].icon = resJson.url; setData({ ...data, technologies: d });
-                                                            }
-                                                        }} />
-                                                        <label htmlFor={`skill-${i}`} className="text-[8px] uppercase tracking-tighter text-secondary cursor-pointer hover:text-white transition-colors">Change Icon</label>
-                                                    </div>
+                                                    {!isProduction && (
+                                                        <div className="mt-2">
+                                                            <input type="file" id={`skill-${i}`} className="hidden" onChange={async (e) => {
+                                                                const file = e.target.files?.[0];
+                                                                if (!file) return;
+                                                                const fd = new FormData(); fd.append("image", file);
+                                                                const res = await fetch("http://localhost:5000/api/upload", { method: "POST", body: fd });
+                                                                const resJson = await res.json();
+                                                                if (resJson.url) {
+                                                                    const d = [...data.technologies]; d[i].icon = resJson.url; setData({ ...data, technologies: d });
+                                                                }
+                                                            }} />
+                                                            <label htmlFor={`skill-${i}`} className="text-[8px] uppercase tracking-tighter text-secondary cursor-pointer hover:text-white transition-colors">Change Icon</label>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             ))}
                                         </div>
@@ -509,9 +615,11 @@ const AdminPanel = () => {
                                                                     const d = [...data.projects]; d[i].image = v; setData({ ...data, projects: d });
                                                                 }} mini className="flex-1" />
                                                             </div>
-                                                            <FileUploader label="Upload New Asset" current={p.image} onUpload={(url: string) => {
-                                                                const d = [...data.projects]; d[i].image = url; setData({ ...data, projects: d });
-                                                            }} />
+                                                            {!isProduction && (
+                                                                <FileUploader label="Upload New Asset" current={p.image} onUpload={(url: string) => {
+                                                                    const d = [...data.projects]; d[i].image = url; setData({ ...data, projects: d });
+                                                                }} />
+                                                            )}
                                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                                 <InputGroup label="Source Gateway" value={p.source_code_link} onChange={(v: string) => {
                                                                     const d = [...data.projects]; d[i].source_code_link = v; setData({ ...data, projects: d });
@@ -595,9 +703,11 @@ const AdminPanel = () => {
                                                                 <img src={getImageUrl(getIconPreview(exp.icon) as string)} className="w-full h-full object-contain filter invert" />
                                                             ) : <Briefcase className="w-10 h-10 text-gray-700" />}
                                                         </div>
-                                                        <FileUploader current={exp.icon} label="Organization Signature" onUpload={(url: string) => {
-                                                            const d = [...data.experiences]; d[i].icon = url; setData({ ...data, experiences: d });
-                                                        }} />
+                                                        {!isProduction && (
+                                                            <FileUploader current={exp.icon} label="Organization Signature" onUpload={(url: string) => {
+                                                                const d = [...data.experiences]; d[i].icon = url; setData({ ...data, experiences: d });
+                                                            }} />
+                                                        )}
                                                     </div>
                                                     <button onClick={() => {
                                                         const d = data.experiences.filter((_: any, idx: number) => idx !== i);
@@ -664,19 +774,23 @@ const AdminPanel = () => {
                                                             <InputGroup label="Image Name or URL" value={t.image} onChange={(v: string) => {
                                                                 const d = [...data.testimonials]; d[i].image = v; setData({ ...data, testimonials: d });
                                                             }} mini className="mb-2" />
-                                                            <input type="file" id={`test-img-${i}`} className="hidden" onChange={async (e) => {
-                                                                const file = e.target.files?.[0];
-                                                                if (!file) return;
-                                                                const fd = new FormData(); fd.append("image", file);
-                                                                const res = await fetch("http://localhost:5000/api/upload", { method: "POST", body: fd });
-                                                                const resJson = await res.json();
-                                                                if (resJson.url) {
-                                                                    const d = [...data.testimonials]; d[i].image = resJson.url; setData({ ...data, testimonials: d });
-                                                                }
-                                                            }} />
-                                                            <label htmlFor={`test-img-${i}`} className="text-[10px] uppercase font-black tracking-widest text-secondary cursor-pointer hover:text-white transition-all flex items-center gap-2">
-                                                                <Upload className="w-3 h-3" /> Sync Source Image
-                                                            </label>
+                                                            {!isProduction && (
+                                                                <>
+                                                                    <input type="file" id={`test-img-${i}`} className="hidden" onChange={async (e) => {
+                                                                        const file = e.target.files?.[0];
+                                                                        if (!file) return;
+                                                                        const fd = new FormData(); fd.append("image", file);
+                                                                        const res = await fetch("http://localhost:5000/api/upload", { method: "POST", body: fd });
+                                                                        const resJson = await res.json();
+                                                                        if (resJson.url) {
+                                                                            const d = [...data.testimonials]; d[i].image = resJson.url; setData({ ...data, testimonials: d });
+                                                                        }
+                                                                    }} />
+                                                                    <label htmlFor={`test-img-${i}`} className="text-[10px] uppercase font-black tracking-widest text-secondary cursor-pointer hover:text-white transition-all flex items-center gap-2">
+                                                                        <Upload className="w-3 h-3" /> Sync Source Image
+                                                                    </label>
+                                                                </>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -728,24 +842,26 @@ const AdminPanel = () => {
                                                         <InputGroup label="Network Endpoint" value={s.link} onChange={(v: string) => {
                                                             const d = [...data.socials]; d[i].link = v; setData({ ...data, socials: d });
                                                         }} mini />
-                                                        <div className="flex items-center gap-4 bg-black/20 p-3 rounded-2xl border border-white/5">
-                                                            <div className="w-8 h-8 rounded-lg animate-pulse bg-white/5 border border-white/5">
-                                                                {getIconPreview(s.icon) ? (
-                                                                    <img src={getImageUrl(getIconPreview(s.icon) as string)} className="w-full h-full object-contain p-1 filter invert" />
-                                                                ) : null}
+                                                        {!isProduction && (
+                                                            <div className="flex items-center gap-4 bg-black/20 p-3 rounded-2xl border border-white/5">
+                                                                <div className="w-8 h-8 rounded-lg animate-pulse bg-white/5 border border-white/5">
+                                                                    {getIconPreview(s.icon) ? (
+                                                                        <img src={getImageUrl(getIconPreview(s.icon) as string)} className="w-full h-full object-contain p-1 filter invert" />
+                                                                    ) : null}
+                                                                </div>
+                                                                <input type="file" id={`soc-img-${i}`} className="hidden" onChange={async (e) => {
+                                                                    const file = e.target.files?.[0];
+                                                                    if (!file) return;
+                                                                    const fd = new FormData(); fd.append("image", file);
+                                                                    const res = await fetch("http://localhost:5000/api/upload", { method: "POST", body: fd });
+                                                                    const resJson = await res.json();
+                                                                    if (resJson.url) {
+                                                                        const d = [...data.socials]; d[i].icon = resJson.url; setData({ ...data, socials: d });
+                                                                    }
+                                                                }} />
+                                                                <label htmlFor={`soc-img-${i}`} className="text-[10px] font-black uppercase tracking-widest text-secondary cursor-pointer flex-1 text-left hover:text-white transition-all">Upload Asset Icon</label>
                                                             </div>
-                                                            <input type="file" id={`soc-img-${i}`} className="hidden" onChange={async (e) => {
-                                                                const file = e.target.files?.[0];
-                                                                if (!file) return;
-                                                                const fd = new FormData(); fd.append("image", file);
-                                                                const res = await fetch("http://localhost:5000/api/upload", { method: "POST", body: fd });
-                                                                const resJson = await res.json();
-                                                                if (resJson.url) {
-                                                                    const d = [...data.socials]; d[i].icon = resJson.url; setData({ ...data, socials: d });
-                                                                }
-                                                            }} />
-                                                            <label htmlFor={`soc-img-${i}`} className="text-[10px] font-black uppercase tracking-widest text-secondary cursor-pointer flex-1 text-left hover:text-white transition-all">Upload Asset Icon</label>
-                                                        </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                             ))}
@@ -776,10 +892,11 @@ const SectionTitle = ({ title, subtitle }: { title: string, subtitle: string }) 
     </div>
 );
 
-const InputGroup = ({ label, value, onChange, placeholder, mini }: any) => (
+const InputGroup = ({ label, value, onChange, placeholder, mini, type = "text" }: any) => (
     <div className="space-y-2">
         <label className={`block font-black uppercase tracking-widest text-gray-600 ${mini ? 'text-[8px]' : 'text-[10px]'}`}>{label}</label>
         <input
+            type={type}
             className={`bg-black/40 backdrop-blur-3xl p-4 rounded-3xl w-full border border-white/5 outline-none focus:border-secondary transition-all text-sm shadow-inner ${mini ? 'py-3 rounded-2xl' : ''}`}
             value={value}
             placeholder={placeholder}
@@ -798,19 +915,17 @@ const FileUploader = ({ current, label, onUpload, mini }: any) => {
                     <input type="file" className="hidden" onChange={async (e) => {
                         setUp(true);
                         const file = e.target.files?.[0];
-                        if (!file) { setUp(false); return; }
+                        if (!file) return;
                         const fd = new FormData(); fd.append("image", file);
                         const res = await fetch("http://localhost:5000/api/upload", { method: "POST", body: fd });
                         const resJson = await res.json();
-                        if (resJson.url) {
-                            await onUpload(resJson.url);
-                        }
+                        if (resJson.url) onUpload(resJson.url);
                         setUp(false);
                     }} />
-                    <Upload className={`w-4 h-4 mr-2 text-secondary ${up ? 'animate-bounce' : ''}`} />
-                    <span className={`font-black opacity-40 group-hover:opacity-100 ${mini ? 'text-[8px]' : 'text-[10px]'} uppercase tracking-[0.2em]`}>
-                        {up ? "Linking Asset..." : "Sync PC Entry"}
-                    </span>
+                    <div className="flex items-center gap-2">
+                        <Upload className={`w-4 h-4 text-secondary ${up ? 'animate-bounce' : ''}`} />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover:text-secondary transition-colors">{up ? 'Uploading...' : 'Upload Asset'}</span>
+                    </div>
                 </label>
             </div>
         </div>
