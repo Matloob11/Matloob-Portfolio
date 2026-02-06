@@ -1,6 +1,7 @@
 import * as React from "react";
 import ReactDOM from "react-dom/client";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/react";
 
 import App from "./app";
 
@@ -23,6 +24,7 @@ ReactDOM.createRoot(rootEl!).render(
         }}
       />
       <App />
+      <Analytics />
     </ErrorBoundary>
   </React.StrictMode>,
 );
