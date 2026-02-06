@@ -47,7 +47,10 @@ const AdminPanel = () => {
     const [activeTab, setActiveTab] = useState("nav");
 
     // GitHub Integration State
-    const [githubToken, setGithubToken] = useState(localStorage.getItem("gh_pat") || "");
+    const [githubToken, setGithubToken] = useState(() => {
+        // Priority: 1. localStorage (User override) 2. Env variable (Admin set)
+        return localStorage.getItem("gh_pat") || (import.meta.env.VITE_GITHUB_TOKEN as string) || "";
+    });
     const [isSaving, setIsSaving] = useState(false);
     const isProduction = window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1";
 
