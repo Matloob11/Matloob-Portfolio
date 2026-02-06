@@ -1,333 +1,49 @@
-// Contains constant data for using in website
-// ! Don't remove anything from here if not sure
+import { assetsMap } from "../assets";
+import portfolioData from "./portfolio-data.json";
 
-import {
-  mobile,
-  backend,
-  creator,
-  web,
-  javascript,
-  typescript,
-  html,
-  css,
-  reactjs,
-  redux,
-  tailwind,
-  nodejs,
-  mongodb,
-  git,
-  figma,
-  docker,
-  meta,
-  starbucks,
-  tesla,
-  shopify,
-  threejs,
-  project1,
-  project2,
-  project3,
-  project4,
-  project5,
-  project6,
-  user1,
-  user2,
-  user3,
-  youtube,
-  linkedin,
-  twitter,
-  github,
-} from "../assets";
+// Map strings in JSON to imported assets
+const mapIcon = (key: string) => {
+  if (!key) return assetsMap["logo"];
+  if (key.startsWith("http") || key.startsWith("/") || key.startsWith("data:")) return key;
+  // If it's a known asset key, return the imported asset
+  if (assetsMap[key]) return assetsMap[key];
+  // Otherwise, return the key itself (could be a Lucide icon name)
+  return key;
+};
 
-// Navbar Links
-export const NAV_LINKS = [
-  {
-    id: "about",
-    title: "About",
-    link: null,
-  },
-  {
-    id: "work",
-    title: "Work",
-    link: null,
-  },
-  {
-    id: "contact",
-    title: "Contact",
-    link: null,
-  },
-  {
-    id: "source-code",
-    title: "Source Code",
-    link: "https://github.com/Matloob11",
-  },
-] as const;
+export const PERSONAL_INFO = {
+  ...portfolioData.personalInfo,
+  logo: mapIcon(portfolioData.personalInfo.logo),
+};
 
-// Services
-export const SERVICES = [
-  {
-    title: "Web Developer",
-    icon: web,
-  },
-  {
-    title: "AI Engineer",
-    icon: mobile,
-  },
-  {
-    title: "Backend Developer",
-    icon: backend,
-  },
-  {
-    title: "Prompt Engineer",
-    icon: creator,
-  },
-] as const;
+export const NAV_LINKS = portfolioData.navLinks;
 
-// Technologies
-export const TECHNOLOGIES = [
-  {
-    name: "HTML 5",
-    icon: html,
-  },
-  {
-    name: "CSS 3",
-    icon: css,
-  },
-  {
-    name: "JavaScript",
-    icon: javascript,
-  },
-  {
-    name: "TypeScript",
-    icon: typescript,
-  },
-  {
-    name: "React JS",
-    icon: reactjs,
-  },
-  {
-    name: "Redux Toolkit",
-    icon: redux,
-  },
-  {
-    name: "Tailwind CSS",
-    icon: tailwind,
-  },
-  {
-    name: "Node JS",
-    icon: nodejs,
-  },
-  {
-    name: "MongoDB",
-    icon: mongodb,
-  },
-  {
-    name: "Three JS",
-    icon: threejs,
-  },
-  {
-    name: "git",
-    icon: git,
-  },
-  {
-    name: "figma",
-    icon: figma,
-  },
-  {
-    name: "docker",
-    icon: docker,
-  },
-] as const;
+export const SERVICES = portfolioData.services.map((s) => ({
+  ...s,
+  icon: mapIcon(s.icon),
+}));
 
-// Experiences
-export const EXPERIENCES = [
-  {
-    title: "Web Developer",
-    company_name: "Freelance / Self-Employed",
-    icon: starbucks,
-    iconBg: "#383E56",
-    date: "2023 - Present",
-    points: [
-      "Developing and maintaining web applications using HTML, CSS, JavaScript, and PHP.",
-      "Creating responsive and user-friendly interfaces.",
-      "Building live weather apps and company portfolio websites.",
-    ],
-  },
-  {
-    title: "AI Engineer",
-    company_name: "Personal Projects",
-    icon: tesla,
-    iconBg: "#E6DEDD",
-    date: "2024 - Present",
-    points: [
-      "Developing AI Agents like AURA and JARVIS using Python.",
-      "Implementing automation and intelligent response systems.",
-      "Working with Machine Learning and Prompt Engineering.",
-    ],
-  },
-] as const;
+export const TECHNOLOGIES = portfolioData.technologies.map((t) => ({
+  ...t,
+  icon: mapIcon(t.icon),
+}));
 
-// Testimonials
-export const TESTIMONIALS = [
-  {
-    testimonial:
-      "Matloob is a dedicated developer who always strives to deliver the best results.",
-    name: "Client 1",
-    designation: "CEO",
-    company: "Tech Corp",
-    image: user1,
-  },
-  {
-    testimonial:
-      "Excellent work on the AI agents. Very impressed with the automation capabilities.",
-    name: "Client 2",
-    designation: "CTO",
-    company: "AI Solutions",
-    image: user2,
-  },
-] as const;
+export const EXPERIENCES = portfolioData.experiences.map((e) => ({
+  ...e,
+  icon: mapIcon(e.icon),
+}));
 
-// Projects
-export const PROJECTS = [
-  {
-    name: "AURA AI AGENT",
-    description:
-      "An advanced AI agent built with Python, designed for intelligent interactions and automation tasks.",
-    tags: [
-      {
-        name: "python",
-        color: "blue-text-gradient",
-      },
-      {
-        name: "ai",
-        color: "green-text-gradient",
-      },
-      {
-        name: "automation",
-        color: "pink-text-gradient",
-      },
-    ],
-    image: project1,
-    source_code_link: "https://github.com/Matloob11/AURA-AI-AGENT",
-    live_site_link: "https://github.com/Matloob11/AURA-AI-AGENT",
-  },
-  {
-    name: "Altaf Catering",
-    description:
-      "A complete website for a catering company, built with PHP, showcasing services, menus, and contact information.",
-    tags: [
-      {
-        name: "php",
-        color: "blue-text-gradient",
-      },
-      {
-        name: "mysql",
-        color: "green-text-gradient",
-      },
-      {
-        name: "css",
-        color: "pink-text-gradient",
-      },
-    ],
-    image: project2,
-    source_code_link: "https://github.com/Matloob11/Altaf-catering-company",
-    live_site_link: "https://github.com/Matloob11/Altaf-catering-company",
-  },
-  {
-    name: "Live Weather App",
-    description:
-      "A real-time weather application built with JavaScript that fetches and displays current weather data.",
-    tags: [
-      {
-        name: "javascript",
-        color: "blue-text-gradient",
-      },
-      {
-        name: "api",
-        color: "green-text-gradient",
-      },
-      {
-        name: "css",
-        color: "pink-text-gradient",
-      },
-    ],
-    image: project3,
-    source_code_link: "https://github.com/Matloob11/LIVE-WEATHER-APP",
-    live_site_link: "https://github.com/Matloob11/LIVE-WEATHER-APP",
-  },
-  {
-    name: "JARVIS AGENT",
-    description:
-      "An AI assistant inspired by Jarvis, capable of handling various queries and performing system tasks.",
-    tags: [
-      {
-        name: "python",
-        color: "blue-text-gradient",
-      },
-      {
-        name: "nlp",
-        color: "green-text-gradient",
-      },
-      {
-        name: "voice",
-        color: "pink-text-gradient",
-      },
-    ],
-    image: project4,
-    source_code_link: "https://github.com/Matloob11/JARVIS-AGENT",
-    live_site_link: "https://github.com/Matloob11/JARVIS-AGENT",
-  },
-  {
-    name: "PHP Project",
-    description:
-      "A comprehensive PHP project demonstrating backend development skills and database integration.",
-    tags: [
-      {
-        name: "php",
-        color: "blue-text-gradient",
-      },
-      {
-        name: "database",
-        color: "green-text-gradient",
-      },
-    ],
-    image: project5,
-    source_code_link: "https://github.com/Matloob11/php-first-project-discuss-complete",
-    live_site_link: "https://github.com/Matloob11/php-first-project-discuss-complete",
-  },
-  {
-    name: "AURA Agent 2",
-    description:
-      "The second iteration of the AURA AI agent, featuring improved algorithms and enhanced performance.",
-    tags: [
-      {
-        name: "python",
-        color: "blue-text-gradient",
-      },
-      {
-        name: "ai",
-        color: "green-text-gradient",
-      },
-    ],
-    image: project6,
-    source_code_link: "https://github.com/Matloob11/AURA-AI-AGENT-2",
-    live_site_link: "https://github.com/Matloob11/AURA-AI-AGENT-2",
-  },
-] as const;
+export const TESTIMONIALS = portfolioData.testimonials.map((t) => ({
+  ...t,
+  image: mapIcon(t.image),
+}));
 
-export const SOCIALS = [
-  {
-    name: "Linkedin",
-    icon: linkedin,
-    link: "https://linkedin.com/in/matloob-hassnain-5b9742373",
-  },
-  {
-    name: "GitHub",
-    icon: github,
-    link: "https://github.com/Matloob11",
-  },
-  {
-    name: "Instagram",
-    icon: web,
-    link: "https://instagram.com/tech_god_786",
-  },
-] as const;
+export const PROJECTS = portfolioData.projects.map((p) => ({
+  ...p,
+  image: mapIcon(p.image),
+}));
+
+export const SOCIALS = portfolioData.socials.map((s) => ({
+  ...s,
+  icon: mapIcon(s.icon),
+}));

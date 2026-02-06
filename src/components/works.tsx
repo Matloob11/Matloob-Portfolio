@@ -34,9 +34,12 @@ const ProjectCard = ({
       <div className="relative w-full h-[230px]">
         {/* Work image */}
         <img
-          src={image}
+          src={image && image.startsWith("/uploads/") ? `http://localhost:5000${image}` : image}
           alt={name}
           className="w-full h-full object-cover rounded-2xl"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "https://via.placeholder.com/400x300?text=Project+Coming+Soon";
+          }}
         />
 
         {/* Live Site */}
@@ -102,7 +105,7 @@ export const Works = () => {
         {/* About */}
         <div className="w-full flex">
           <motion.p
-            variants={fadeIn("", "", 0.1, 1)}
+            variants={fadeIn(undefined, undefined, 0.1, 1)}
             className="mt-3 text-secondary text-[17px] max-w-3xl leading-[30px]"
           >
             Following projects showcases my skills and experience through

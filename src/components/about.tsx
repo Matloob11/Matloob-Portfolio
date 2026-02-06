@@ -1,10 +1,11 @@
 import { Tilt } from "react-tilt";
 import { motion } from "framer-motion";
 
-import { SERVICES } from "../constants";
+import { SERVICES, PERSONAL_INFO } from "../constants";
 import { SectionWrapper } from "../hoc";
 import { styles } from "../styles";
 import { fadeIn, textVariant } from "../utils/motion";
+import LucideIcon from "./LucideIcon";
 
 type ServiceCardProps = {
   index: number;
@@ -14,6 +15,9 @@ type ServiceCardProps = {
 
 // Service Card
 const ServiceCard = ({ index, title, icon }: ServiceCardProps) => {
+  const isPath = icon && (icon.startsWith("/") || icon.startsWith("http") || icon.includes("."));
+  const iconUrl = icon && icon.startsWith("/uploads/") ? `http://localhost:5000${icon}` : icon;
+
   return (
     <Tilt
       options={{
@@ -28,7 +32,11 @@ const ServiceCard = ({ index, title, icon }: ServiceCardProps) => {
         className="w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card"
       >
         <div className="bg-tertiary rounded-[20px] py-5 px-12 min-h-[280px] flex justify-evenly items-center flex-col">
-          <img src={icon} alt={title} className="w-16 h-16 object-contain" />
+          {isPath ? (
+            <img src={iconUrl} alt={title} className="w-16 h-16 object-contain" />
+          ) : (
+            <LucideIcon name={icon || "Zap"} className="w-16 h-16 text-secondary" />
+          )}
           <h3 className="text-white text-[20px] font-bold text-center">
             {title}
           </h3>
@@ -54,7 +62,7 @@ export const About = () => {
           variants={fadeIn(undefined, undefined, 0.1, 1)}
           className="empty-4 text-secondary text-[17px] max-w-3xl leading-[30px]"
         >
-          Hi, I’m Matloob Ul Hassnian. I am a passionate developer with expertise in Artificial Intelligence,
+          Hi, I’m {PERSONAL_INFO.fullName}. I am a passionate developer with expertise in Artificial Intelligence,
           Machine Learning, and Web Development. I specialize in building smart, efficient solutions and
           creating advanced AI agents. With a strong foundation in Mathematics and Computer Science,
           I am always eager to learn and tackle challenging projects. Let's work together to bring your ideas to life!

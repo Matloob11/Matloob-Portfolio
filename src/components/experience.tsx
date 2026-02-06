@@ -10,6 +10,7 @@ import { styles } from "../styles";
 import { textVariant } from "../utils/motion";
 
 import "react-vertical-timeline-component/style.min.css";
+import LucideIcon from "./LucideIcon";
 
 type ExperienceCardProps = {
   experience: (typeof EXPERIENCES)[number];
@@ -24,11 +25,15 @@ const ExperienceCard = ({ experience }: ExperienceCardProps) => (
     iconStyle={{ background: experience.iconBg }}
     icon={
       <div className="flex justify-center items-center w-full h-full">
-        <img
-          src={experience.icon}
-          alt={experience.company_name}
-          className="w-[60%] h-[60%] object-contain"
-        />
+        {experience.icon && (experience.icon.startsWith("/") || experience.icon.startsWith("http") || experience.icon.includes(".")) ? (
+          <img
+            src={experience.icon.startsWith("/uploads/") ? `http://localhost:5000${experience.icon}` : experience.icon}
+            alt={experience.company_name}
+            className="w-[60%] h-[60%] object-contain"
+          />
+        ) : (
+          <LucideIcon name={experience.icon || "Briefcase"} className="w-[60%] h-[60%] text-white" />
+        )}
       </div>
     }
   >

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 
 import { ComputersCanvas } from "./canvas";
+import { PERSONAL_INFO } from "../constants";
 import { styles } from "../styles";
 import { cn } from "../utils/lib";
 
@@ -23,11 +24,10 @@ export const Hero = () => {
         {/* About Me */}
         <div>
           <h1 className={cn(styles.heroHeadText, "text-white")}>
-            Hi, I'm <span className="text-[#915eff]">Matloob</span>
+            Hi, I'm <span className="text-[#915eff]">{PERSONAL_INFO.heroTitle}</span>
           </h1>
           <p className={cn(styles.heroSubText, "mt-2 text-white-100")}>
-            I develop AI Agents, Web Applications, <br className="sm:block hidden" />
-            and Database Solutions
+            {PERSONAL_INFO.heroSubtitle}
           </p>
         </div>
       </div>

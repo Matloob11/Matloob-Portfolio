@@ -1,7 +1,7 @@
 ## Contributing
 
-[fork]: https://github.com/sanidhyy/3d-portfolio/fork
-[pr]: https://github.com/sanidhyy/3d-portfolio/compare
+[fork]: https://github.com/Matloob11/3d-portfolio-main/fork
+[pr]: https://github.com/Matloob11/3d-portfolio-main/compare
 [style]: https://standardjs.com/
 [code-of-conduct]: CODE_OF_CONDUCT.md
 

@@ -5,6 +5,7 @@ import { SectionWrapper } from "../hoc";
 import { styles } from "../styles";
 import { cn } from "../utils/lib";
 import { fadeIn, textVariant } from "../utils/motion";
+import LucideIcon from "./LucideIcon";
 
 type FeedbackCardProps = {
   index: number;
@@ -25,7 +26,7 @@ const FeedbackCard = ({
   image,
 }: FeedbackCardProps) => (
   <motion.div
-    variants={fadeIn("", "spring", index * 0.5, 0.75)}
+    variants={fadeIn(undefined, "spring", index * 0.5, 0.75)}
     className="bg-black-200 p-10 rounded-3xl xs:w-[320px] w-full"
   >
     {/* Quote " */}
@@ -46,12 +47,23 @@ const FeedbackCard = ({
           </p>
         </div>
 
-        {/* User Image */}
-        <img
-          src={image}
-          alt={`feedback-by-${name}`}
-          className="w-10 h-10 rounded-full object-cover"
-        />
+        {/* User Image or Icon */}
+        <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-tertiary">
+          {image && (image.startsWith("/") || image.startsWith("http") || image.includes(".")) ? (
+            <img
+              src={image.startsWith("/uploads/") ? `http://localhost:5000${image}` : image}
+              alt={`feedback-by-${name}`}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                // Fallback if image fails to load
+                (e.target as HTMLImageElement).style.display = 'none';
+                (e.target as HTMLImageElement).parentElement!.classList.add('p-2');
+              }}
+            />
+          ) : (
+            <LucideIcon name={image || "User"} className="w-6 h-6 text-secondary" />
+          )}
+        </div>
       </div>
     </div>
   </motion.div>
