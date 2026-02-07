@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { assetsMap } from "../assets";
 import LucideIcon from "./LucideIcon";
+import portfolioData from "../constants/portfolio-data.json";
 
 // Helper to map icon keys to actual assets or return the path
 const getIconPreview = (key: string) => {
@@ -39,8 +40,8 @@ const getImageUrl = (url: string) => {
 };
 
 const AdminPanel = () => {
-    const [data, setData] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState<any>(portfolioData);
+    const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -68,31 +69,28 @@ const AdminPanel = () => {
     }, []);
 
     const fetchData = () => {
-        setLoading(true);
-        setError(null);
-
-        // In production, we fetch directly from the local JSON file (read-only)
-        // In local dev, we try to fetch from the admin server
-        const fetchUrl = isProduction ? "/src/constants/portfolio-data.json" : "http://localhost:5000/api/data";
-
-        fetch(fetchUrl)
-            .then((res) => {
-                if (!res.ok) throw new Error("Failed to load data");
-                return res.json();
-            })
-            .then((json) => {
-                setData(json);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error("Error fetching data:", err);
-                if (isProduction) {
-                    setError("Failed to load portfolio data from production source.");
-                } else {
-                    setError("Admin server is not running or unreachable. If you are on Vercel, please note that the Admin Panel only works when running the project locally with 'npm run admin' unless GitHub API is configured.");
-                }
-                setLoading(false);
-            });
+        // In local dev, we try to fetch from the admin server to get latest changes
+        if (!isProduction) {
+            setLoading(true);
+            setError(null);
+            fetch("http://localhost:5000/api/data")
+                .then((res) => {
+                    if (!res.ok) throw new Error("Failed to connect to admin server");
+                    return res.json();
+                })
+                .then((json) => {
+                    setData(json);
+                    setLoading(false);
+                })
+                .catch((err) => {
+                    console.error("Error fetching data:", err);
+                    setError("Admin server is not running or unreachable. If you are on Vercel, please note that the Admin Panel only works for direct edits if GitHub API is configured in the tabs below.");
+                    setLoading(false);
+                });
+        } else {
+            // In production, we already initialized state with the bundled portfolioData
+            setLoading(false);
+        }
     };
 
     const handleSave = async () => {
