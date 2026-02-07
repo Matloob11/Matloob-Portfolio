@@ -1,289 +1,302 @@
 {
-    "personalInfo": {
-        "name": "Matloob",
-        "fullName": "Matloob Ul Hassnain",
-        "logo": "logo",
-        "heroTitle": "Matloob",
-        "heroSubtitle": "I develop AI Agents, Web Applications, and Database Solutions"
+  "personalInfo": {
+    "name": "Matloob",
+    "fullName": "Matloob Ul Hassnain",
+    "logo": "logo",
+    "heroTitle": "Matloob",
+    "heroSubtitle": "I develop AI Agents, Web Applications, and Database Solutions"
+  },
+  "navLinks": [
+    {
+      "id": "about",
+      "title": "About",
+      "link": null
     },
-    "navLinks": [
+    {
+      "id": "work",
+      "title": "Work",
+      "link": null
+    },
+    {
+      "id": "contact",
+      "title": "Contact",
+      "link": null
+    },
+    {
+      "id": "contact-us",
+      "title": "Contact Us",
+      "link": "https://wa.me/923078633218"
+    }
+  ],
+  "services": [
+    {
+      "title": "Web Developer",
+      "icon": "web"
+    },
+    {
+      "title": "AI Engineer",
+      "icon": "mobile"
+    },
+    {
+      "title": "Backend Developer",
+      "icon": "backend"
+    },
+    {
+      "title": "Prompt Engineer",
+      "icon": "creator"
+    }
+  ],
+  "technologies": [
+    {
+      "name": "HTML 5",
+      "icon": "html"
+    },
+    {
+      "name": "CSS 3",
+      "icon": "css"
+    },
+    {
+      "name": "JavaScript",
+      "icon": "javascript"
+    },
+    {
+      "name": "TypeScript",
+      "icon": "typescript"
+    },
+    {
+      "name": "React JS",
+      "icon": "reactjs"
+    },
+    {
+      "name": "Redux Toolkit",
+      "icon": "redux"
+    },
+    {
+      "name": "Tailwind CSS",
+      "icon": "tailwind"
+    },
+    {
+      "name": "Node JS",
+      "icon": "nodejs"
+    },
+    {
+      "name": "MongoDB",
+      "icon": "mongodb"
+    },
+    {
+      "name": "Three JS",
+      "icon": "threejs"
+    },
+    {
+      "name": "git",
+      "icon": "git"
+    },
+    {
+      "name": "figma",
+      "icon": "figma"
+    },
+    {
+      "name": "docker",
+      "icon": "docker"
+    }
+  ],
+  "experiences": [
+    {
+      "title": "Web Developer",
+      "company_name": "Freelance / Self-Employed",
+      "icon": "starbucks",
+      "iconBg": "#383E56",
+      "date": "2023 - Present",
+      "points": [
+        "Developing and maintaining web applications using HTML, CSS, JavaScript, and PHP.",
+        "Creating responsive and user-friendly interfaces.",
+        "Building live weather apps and company portfolio websites."
+      ]
+    },
+    {
+      "title": "AI Engineer",
+      "company_name": "Personal Projects",
+      "icon": "tesla",
+      "iconBg": "#E6DEDD",
+      "date": "2024 - Present",
+      "points": [
+        "Developing AI Agents like AURA and JARVIS using Python.",
+        "Implementing automation and intelligent response systems.",
+        "Working with Machine Learning and Prompt Engineering."
+      ]
+    }
+  ],
+  "testimonials": [
+    {
+      "testimonial": "Matloob is a dedicated developer who always strives to deliver the best results.",
+      "name": "Client 1",
+      "designation": "CEO",
+      "company": "Tech Corp",
+      "image": "user1"
+    },
+    {
+      "testimonial": "Excellent work on the AI agents. Very impressed with the automation capabilities.",
+      "name": "Client 2",
+      "designation": "CTO",
+      "company": "AI Solutions",
+      "image": "user2"
+    },
+    {
+      "testimonial": "Great work!",
+      "name": "Client Name",
+      "designation": "CEO",
+      "company": "Company",
+      "image": "/uploads/1770361169287-matloob1.png"
+    }
+  ],
+  "projects": [
+    {
+      "name": "AURA AI AGENT",
+      "description": "An advanced AI agent built with Python, designed for intelligent interactions and automation tasks.",
+      "tags": [
         {
-            "id": "about",
-            "title": "About",
-            "link": null
+          "name": "python",
+          "color": "blue-text-gradient"
         },
         {
-            "id": "work",
-            "title": "Work",
-            "link": null
+          "name": "ai",
+          "color": "green-text-gradient"
         },
         {
-            "id": "contact",
-            "title": "Contact",
-            "link": null
-        },
-        {
-            "id": "contact-us",
-            "title": "Contact Us",
-            "link": "https://wa.me/923078633218"
+          "name": "automation",
+          "color": "pink-text-gradient"
         }
-    ],
-    "services": [
+      ],
+      "image": "project1",
+      "source_code_link": "https://github.com/Matloob11/AURA-AI-AGENT",
+      "live_site_link": "https://github.com/Matloob11/AURA-AI-AGENT"
+    },
+    {
+      "name": "Altaf Catering",
+      "description": "A complete website for a catering company, built with PHP, showcasing services, menus, and contact information.",
+      "tags": [
         {
-            "title": "Web Developer",
-            "icon": "web"
+          "name": "php",
+          "color": "blue-text-gradient"
         },
         {
-            "title": "AI Engineer",
-            "icon": "mobile"
+          "name": "mysql",
+          "color": "green-text-gradient"
         },
         {
-            "title": "Backend Developer",
-            "icon": "backend"
-        },
-        {
-            "title": "Prompt Engineer",
-            "icon": "creator"
+          "name": "css",
+          "color": "pink-text-gradient"
         }
-    ],
-    "technologies": [
+      ],
+      "image": "project2",
+      "source_code_link": "https://github.com/Matloob11/Altaf-catering-company",
+      "live_site_link": "https://github.com/Matloob11/Altaf-catering-company"
+    },
+    {
+      "name": "Live Weather App",
+      "description": "A real-time weather application built with JavaScript that fetches and displays current weather data.",
+      "tags": [
         {
-            "name": "HTML 5",
-            "icon": "html"
+          "name": "javascript",
+          "color": "blue-text-gradient"
         },
         {
-            "name": "CSS 3",
-            "icon": "css"
+          "name": "api",
+          "color": "green-text-gradient"
         },
         {
-            "name": "JavaScript",
-            "icon": "javascript"
-        },
-        {
-            "name": "TypeScript",
-            "icon": "typescript"
-        },
-        {
-            "name": "React JS",
-            "icon": "reactjs"
-        },
-        {
-            "name": "Redux Toolkit",
-            "icon": "redux"
-        },
-        {
-            "name": "Tailwind CSS",
-            "icon": "tailwind"
-        },
-        {
-            "name": "Node JS",
-            "icon": "nodejs"
-        },
-        {
-            "name": "MongoDB",
-            "icon": "mongodb"
-        },
-        {
-            "name": "Three JS",
-            "icon": "threejs"
-        },
-        {
-            "name": "git",
-            "icon": "git"
-        },
-        {
-            "name": "figma",
-            "icon": "figma"
-        },
-        {
-            "name": "docker",
-            "icon": "docker"
+          "name": "css",
+          "color": "pink-text-gradient"
         }
-    ],
-    "experiences": [
+      ],
+      "image": "project3",
+      "source_code_link": "https://github.com/Matloob11/LIVE-WEATHER-APP",
+      "live_site_link": "https://github.com/Matloob11/LIVE-WEATHER-APP"
+    },
+    {
+      "name": "JARVIS AGENT",
+      "description": "An AI assistant inspired by Jarvis, capable of handling various queries and performing system tasks.",
+      "tags": [
         {
-            "title": "Web Developer",
-            "company_name": "Freelance / Self-Employed",
-            "icon": "starbucks",
-            "iconBg": "#383E56",
-            "date": "2023 - Present",
-            "points": [
-                "Developing and maintaining web applications using HTML, CSS, JavaScript, and PHP.",
-                "Creating responsive and user-friendly interfaces.",
-                "Building live weather apps and company portfolio websites."
-            ]
+          "name": "python",
+          "color": "blue-text-gradient"
         },
         {
-            "title": "AI Engineer",
-            "company_name": "Personal Projects",
-            "icon": "tesla",
-            "iconBg": "#E6DEDD",
-            "date": "2024 - Present",
-            "points": [
-                "Developing AI Agents like AURA and JARVIS using Python.",
-                "Implementing automation and intelligent response systems.",
-                "Working with Machine Learning and Prompt Engineering."
-            ]
+          "name": "nlp",
+          "color": "green-text-gradient"
+        },
+        {
+          "name": "voice",
+          "color": "pink-text-gradient"
         }
-    ],
-    "testimonials": [
+      ],
+      "image": "project4",
+      "source_code_link": "https://github.com/Matloob11/JARVIS-AGENT",
+      "live_site_link": "https://github.com/Matloob11/JARVIS-AGENT"
+    },
+    {
+      "name": "PHP Project",
+      "description": "A comprehensive PHP project demonstrating backend development skills and database integration.",
+      "tags": [
         {
-            "testimonial": "Matloob is a dedicated developer who always strives to deliver the best results.",
-            "name": "Client 1",
-            "designation": "CEO",
-            "company": "Tech Corp",
-            "image": "user1"
+          "name": "php",
+          "color": "blue-text-gradient"
         },
         {
-            "testimonial": "Excellent work on the AI agents. Very impressed with the automation capabilities.",
-            "name": "Client 2",
-            "designation": "CTO",
-            "company": "AI Solutions",
-            "image": "user2"
-        },
-        {
-            "testimonial": "Great work!",
-            "name": "Client Name",
-            "designation": "CEO",
-            "company": "Company",
-            "image": "/uploads/1770361169287-matloob1.png"
+          "name": "database",
+          "color": "green-text-gradient"
         }
-    ],
-    "projects": [
+      ],
+      "image": "project5",
+      "source_code_link": "https://github.com/Matloob11/php-first-project-discuss-complete",
+      "live_site_link": "https://github.com/Matloob11/php-first-project-discuss-complete"
+    },
+    {
+      "name": "AURA Agent 2",
+      "description": "The second iteration of the AURA AI agent, featuring improved algorithms and enhanced performance.",
+      "tags": [
         {
-            "name": "AURA AI AGENT",
-            "description": "An advanced AI agent built with Python, designed for intelligent interactions and automation tasks.",
-            "tags": [
-                {
-                    "name": "python",
-                    "color": "blue-text-gradient"
-                },
-                {
-                    "name": "ai",
-                    "color": "green-text-gradient"
-                },
-                {
-                    "name": "automation",
-                    "color": "pink-text-gradient"
-                }
-            ],
-            "image": "project1",
-            "source_code_link": "https://github.com/Matloob11/AURA-AI-AGENT",
-            "live_site_link": "https://github.com/Matloob11/AURA-AI-AGENT"
+          "name": "python",
+          "color": "blue-text-gradient"
         },
         {
-            "name": "Altaf Catering",
-            "description": "A complete website for a catering company, built with PHP, showcasing services, menus, and contact information.",
-            "tags": [
-                {
-                    "name": "php",
-                    "color": "blue-text-gradient"
-                },
-                {
-                    "name": "mysql",
-                    "color": "green-text-gradient"
-                },
-                {
-                    "name": "css",
-                    "color": "pink-text-gradient"
-                }
-            ],
-            "image": "project2",
-            "source_code_link": "https://github.com/Matloob11/Altaf-catering-company",
-            "live_site_link": "https://github.com/Matloob11/Altaf-catering-company"
-        },
-        {
-            "name": "Live Weather App",
-            "description": "A real-time weather application built with JavaScript that fetches and displays current weather data.",
-            "tags": [
-                {
-                    "name": "javascript",
-                    "color": "blue-text-gradient"
-                },
-                {
-                    "name": "api",
-                    "color": "green-text-gradient"
-                },
-                {
-                    "name": "css",
-                    "color": "pink-text-gradient"
-                }
-            ],
-            "image": "project3",
-            "source_code_link": "https://github.com/Matloob11/LIVE-WEATHER-APP",
-            "live_site_link": "https://github.com/Matloob11/LIVE-WEATHER-APP"
-        },
-        {
-            "name": "JARVIS AGENT",
-            "description": "An AI assistant inspired by Jarvis, capable of handling various queries and performing system tasks.",
-            "tags": [
-                {
-                    "name": "python",
-                    "color": "blue-text-gradient"
-                },
-                {
-                    "name": "nlp",
-                    "color": "green-text-gradient"
-                },
-                {
-                    "name": "voice",
-                    "color": "pink-text-gradient"
-                }
-            ],
-            "image": "project4",
-            "source_code_link": "https://github.com/Matloob11/JARVIS-AGENT",
-            "live_site_link": "https://github.com/Matloob11/JARVIS-AGENT"
-        },
-        {
-            "name": "PHP Project",
-            "description": "A comprehensive PHP project demonstrating backend development skills and database integration.",
-            "tags": [
-                {
-                    "name": "php",
-                    "color": "blue-text-gradient"
-                },
-                {
-                    "name": "database",
-                    "color": "green-text-gradient"
-                }
-            ],
-            "image": "project5",
-            "source_code_link": "https://github.com/Matloob11/php-first-project-discuss-complete",
-            "live_site_link": "https://github.com/Matloob11/php-first-project-discuss-complete"
-        },
-        {
-            "name": "AURA Agent 2",
-            "description": "The second iteration of the AURA AI agent, featuring improved algorithms and enhanced performance.",
-            "tags": [
-                {
-                    "name": "python",
-                    "color": "blue-text-gradient"
-                },
-                {
-                    "name": "ai",
-                    "color": "green-text-gradient"
-                }
-            ],
-            "image": "project6",
-            "source_code_link": "https://github.com/Matloob11/AURA-AI-AGENT-2",
-            "live_site_link": "https://github.com/Matloob11/AURA-AI-AGENT-2"
+          "name": "ai",
+          "color": "green-text-gradient"
         }
-    ],
-    "socials": [
+      ],
+      "image": "project6",
+      "source_code_link": "https://github.com/Matloob11/AURA-AI-AGENT-2",
+      "live_site_link": "https://github.com/Matloob11/AURA-AI-AGENT-2"
+    },
+    {
+      "name": "New Project",
+      "description": "...reedtfygjkml,;",
+      "tags": [
         {
-            "name": "Linkedin",
-            "icon": "linkedin",
-            "link": "https://linkedin.com/in/matloob-hassnain-5b9742373"
-        },
-        {
-            "name": "GitHub",
-            "icon": "github",
-            "link": "https://github.com/Matloob11"
-        },
-        {
-            "name": "Instagram",
-            "icon": "web",
-            "link": "https://instagram.com/tech_god_786"
+          "name": "react",
+          "color": "blue-text-gradient"
         }
-    ]
+      ],
+      "image": "project1",
+      "source_code_link": "tyhj",
+      "live_site_link": "fgh"
+    }
+  ],
+  "socials": [
+    {
+      "name": "Linkedin",
+      "icon": "linkedin",
+      "link": "https://linkedin.com/in/matloob-hassnain-5b9742373"
+    },
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "link": "https://github.com/Matloob11"
+    },
+    {
+      "name": "Instagram",
+      "icon": "web",
+      "link": "https://instagram.com/tech_god_786"
+    }
+  ]
 }
