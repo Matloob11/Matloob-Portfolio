@@ -47,7 +47,7 @@
     "clsx": "^2.1.1",
     "cors": "^2.8.6",
     "express": "^5.2.1",
-    "framer-motion": "^12.30.0",
+    "framer-motion": "^12.34.0",
     "lucide-react": "^0.563.0",
     "maath": "^0.10.8",
     "multer": "^2.0.2",
